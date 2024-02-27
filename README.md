@@ -10,6 +10,7 @@
  * Multiple Group Admins, Group Creator is default admin and can appoint other users of the group as admins.
  * Add new user to group, remove user from existing group, updating group name, adding and removing of group admins are accessible features for a group admin.
  * Once a user leaves a group/removed by admin from group that group chat and messages are no more accessible to that particular user.
+ * All Messages with Timestamps.
  * Live Typing Feature.
  * Notification Feature on receiving new messages.
  * Persistent Storage for user chats and messages.
