@@ -6,6 +6,7 @@ const port = process.env.PORT || 5000;
 const userRoute = require("./routes/userRoutes");
 const chatRoute = require("./routes/chatRoutes");
 const messageRoute = require("./routes/messageRoutes");
+const path = require("path");
 
 // app.use(cors());
 app.use(express.json({

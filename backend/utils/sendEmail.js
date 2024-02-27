@@ -44,7 +44,7 @@ module.exports = async (user, mailType) => {
       mailOptions = {
         from: process.env.SEND_EMAIL,
         to: user.email,
-        subject: "Verify Email For MERN Music Player Auth",
+        subject: "Verify Email For MERN Chat App Auth",
         html: emailContent,
       };
     } else {
@@ -53,7 +53,7 @@ module.exports = async (user, mailType) => {
       mailOptions = {
         from: process.env.SEND_EMAIL,
         to: user.email,
-        subject: "Reset password For MERN Music Player Auth",
+        subject: "Reset password For MERN Chat App Auth",
         html: emailContent,
       };
     }
