@@ -10,6 +10,7 @@
  * Multiple Group Admins, Group Creator is default admin and can appoint other users of the group as admins.
  * Add new user to group, remove user from existing group, updating group name, adding and removing of group admins are accessible features for a group admin.
  * Once a user leaves a group/removed by admin from group that group chat and messages are no more accessible to that particular user.
+ * Live Typing Feature.
  * Notification Feature on receiving new messages.
  * Persistent Storage for user chats and messages.
 ## Backend Schema Diagram:
@@ -27,10 +28,20 @@
 <img alt="MongoDB" src ="https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white"/>
 
 #### Deployed Version:
-
+https://chat-app-krc2.onrender.com
 
 
 ## Demonstration:
+![image](https://github.com/adityaganji889/Chat-App/assets/88584574/8dd411e2-90c0-42d0-aaa8-f3e9fee35d0a)
+![image](https://github.com/adityaganji889/Chat-App/assets/88584574/f210c452-fe96-4aa6-af68-a26994fcf75d)
+![image](https://github.com/adityaganji889/Chat-App/assets/88584574/d1fcec0c-4dde-4be6-9271-a9e929b02de3)
+![image](https://github.com/adityaganji889/Chat-App/assets/88584574/21db5314-325d-44e3-97eb-4f21038600fb)
+![image](https://github.com/adityaganji889/Chat-App/assets/88584574/a37a9318-ad89-4823-b646-4bdbb10f08f9)
+![image](https://github.com/adityaganji889/Chat-App/assets/88584574/09f63e05-14a3-4d7a-a05e-8e84274a5e92)
+
+
+
+
 
 
 
