@@ -12,7 +12,8 @@
  * Notification Feature on receiving new messages.
  * Persistent Storage for user chats and messages.
 ## Backend Schema Diagram:
- 
+![image](https://github.com/adityaganji889/Chat-App/assets/88584574/8ea6f707-2fbc-4188-9809-9664b3bf214a)
+
 
 ## Tech Stack Used:
 #### Front-End:
