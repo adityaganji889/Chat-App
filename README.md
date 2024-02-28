@@ -12,7 +12,7 @@
  * Once a user leaves a group/removed by admin from group that group chat and messages are no more accessible to that particular user.
  * All Messages with Timestamps.
  * Live Typing feature.
- * Online/Offline users features to let other users know if the user they're chatting with is online or went offline.
+ * Online/Offline users feature to let other users know if the user they're chatting with is online or went offline.
  * Notification Feature on receiving new messages.
  * Persistent Storage for user chats and messages.
 ## Backend Schema Diagram:
