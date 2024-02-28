@@ -11,7 +11,8 @@
  * Add new user to group, remove user from existing group, updating group name, adding and removing of group admins are accessible features for a group admin.
  * Once a user leaves a group/removed by admin from group that group chat and messages are no more accessible to that particular user.
  * All Messages with Timestamps.
- * Live Typing Feature.
+ * Live Typing feature.
+ * Online/Offline users features to let other users know if the user they're chatting with is online or went offline.
  * Notification Feature on receiving new messages.
  * Persistent Storage for user chats and messages.
 ## Backend Schema Diagram:
@@ -39,6 +40,12 @@ https://chat-app-krc2.onrender.com
 ![image](https://github.com/adityaganji889/Chat-App/assets/88584574/21db5314-325d-44e3-97eb-4f21038600fb)
 ![image](https://github.com/adityaganji889/Chat-App/assets/88584574/a37a9318-ad89-4823-b646-4bdbb10f08f9)
 ![image](https://github.com/adityaganji889/Chat-App/assets/88584574/09f63e05-14a3-4d7a-a05e-8e84274a5e92)
+![Live](https://github.com/adityaganji889/Chat-App/assets/88584574/8e49fffb-27bf-4ba6-9f05-f185f6abf8e7)
+![Group](https://github.com/adityaganji889/Chat-App/assets/88584574/5b0b0c7f-516e-407f-bf4f-fab6095fdf02)
+![notification](https://github.com/adityaganji889/Chat-App/assets/88584574/dac50f06-f93b-4cfd-b7a9-ca7efdc31123)
+
+
+
 
 
 
