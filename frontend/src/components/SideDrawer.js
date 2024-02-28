@@ -120,7 +120,7 @@ function SideDrawer({ fetchAgain, setFetchAgain }) {
                 dispatch(SetSelectedChat(notif.chat));
                 dispatch(SetNotification(notification.filter((n) => n !== notif)));
               }}>
-                {notif.chat.isGroupChat?`New Message in ${notif.chat.chatName}`:`New Message from ${latestMessageSender(notif.sender,notification.chat.users)}`}
+                {notif.chat.isGroupChat?`New Message in ${notif.chat.chatName}`:`New Message from ${latestMessageSender(notif.sender,notif.chat.users)}`}
               </MenuItem>
             ))}
           </MenuList>

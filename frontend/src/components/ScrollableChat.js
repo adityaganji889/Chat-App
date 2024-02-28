@@ -13,6 +13,7 @@ import { Text } from "@chakra-ui/react";
 
 const ScrollableChat = ({ messages }) => {
   const { user } = useSelector(state=>state.users);
+  const { selectedChat } = useSelector(state=>state.chats);
 
   return (
     <ScrollableFeed>
@@ -44,6 +45,7 @@ const ScrollableChat = ({ messages }) => {
                 maxWidth: "75%",
               }}
             >
+              {selectedChat.isGroupChat && <Text fontSize="xs" className="d-flex justify-content-start">{m.sender.name}</Text>}
               {m.content}
               <Text fontSize="xs" className="d-flex justify-content-end">
               {moment(m.createdAt).format("DD/MM/YYYY hh:mm A")}

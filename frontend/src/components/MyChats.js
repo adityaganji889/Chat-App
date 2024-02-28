@@ -18,7 +18,7 @@ import {
 } from "../config/ChatLogics";
 import moment from 'moment';
 
-function MyChats({ fetchAgain }) {
+function MyChats({ fetchAgain, onlineUsers }) {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.users);
   const { selectedChat, chatLoading, listChats } = useSelector(
@@ -121,10 +121,12 @@ function MyChats({ fetchAgain }) {
                 }
               />
               <Box>
-                <Text>
+                <Text display="flex">
                   {!chat.isGroupChat
                     ? getSender(user, chat.users)
                     : chat.chatName}
+                  &nbsp;&nbsp;
+                  {!chat.isGroupChat && onlineUsers.includes(getSenderFull(user, chat.users)._id) && <Text fontSize="xs">🟢</Text>}
                 </Text>
                 {chat?.latestMessage && (
                   <Text fontSize="xs">

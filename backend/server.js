@@ -35,10 +35,12 @@ const server = app.listen(port,()=>{
 const io = require('socket.io')(server,{
     pingTimeout: 60000,
     cors: {
+        // origin: "http://localhost:3000"
         origin: "https://chat-app-krc2.onrender.com/"
     }
 })
 
+let onlineUsers = [];
 io.on("connection",(socket)=>{
    console.log(`Connected to socket.io`);
 
@@ -81,6 +83,24 @@ io.on("connection",(socket)=>{
         }
      })
    })
+
+  // online users
+
+  socket.on("came-online", (userid) => {
+    if (!onlineUsers.includes(userid)) {
+      onlineUsers.push(userid);
+    }
+    console.log("Room is joined by: "+userid);
+    io.emit("online-users-updated", onlineUsers);
+  });
+  
+  //offline users
+
+  socket.on("went-offline", (userid) => {
+    console.log("Room is left by: "+userid);
+    onlineUsers = onlineUsers.filter((user) => user !== userid);
+    io.emit("online-users-updated", onlineUsers);
+  });
 
    socket.off("setup",()=>{
      console.log("User Disconnected");

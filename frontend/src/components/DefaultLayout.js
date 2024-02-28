@@ -10,7 +10,7 @@ import Profile from "./Profile";
 import { HideLoading } from "../redux/loaderSlice";
 import { Avatar, Menu, MenuButton, Button, MenuList, MenuItem, MenuDivider } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { HideChatLoading, SetSelectedChat } from "../redux/chatsSlice";
+import { HideChatLoading, SetListChats, SetNotification, SetSelectedChat } from "../redux/chatsSlice";
 
 function DefaultLayout({ children }) {
   const navigate = useNavigate();
@@ -52,6 +52,8 @@ function DefaultLayout({ children }) {
                   setTimeout(() => {
                     dispatch(SetUser(null));
                     dispatch(SetSelectedChat(null));
+                    dispatch(SetListChats([]));
+                    dispatch(SetNotification([]));
                     // dispatch(removeSelectedSongIndex());
                     // dispatch(removeSelectedSong());
                     // dispatch(removeAllSongs());

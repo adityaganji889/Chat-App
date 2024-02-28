@@ -4,7 +4,7 @@ import SingleChat from "./SingleChat";
 import { useSelector } from "react-redux";
 // import { ChatState } from "../Context/ChatProvider";
 
-const Chatbox = ({ fetchAgain, setFetchAgain }) => {
+const Chatbox = ({ fetchAgain, setFetchAgain, onlineUsers, setOnlineUsers }) => {
 //   const { selectedChat } = ChatState();
   const {selectedChat} = useSelector(state=>state.chats);
 
@@ -19,7 +19,7 @@ const Chatbox = ({ fetchAgain, setFetchAgain }) => {
       borderRadius="lg"
       borderWidth="1px"
     >
-      <SingleChat fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
+      <SingleChat fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} onlineUsers={onlineUsers} setOnlineUsers={setOnlineUsers} />
     </Box>
   );
 };

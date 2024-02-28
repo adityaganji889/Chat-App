@@ -21,10 +21,15 @@ import ScrollableChat from "./ScrollableChat";
 import io from "socket.io-client";
 
 const ENDPOINT = "https://chat-app-krc2.onrender.com/";
+// const ENDPOINT = "http://localhost:5000";
 var socket, selectedChatCompare;
 
-
-function SingleChat({ fetchAgain, setFetchAgain }) {
+function SingleChat({
+  fetchAgain,
+  setFetchAgain,
+  onlineUsers,
+  setOnlineUsers,
+}) {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.users);
   const { selectedChat, notification } = useSelector((state) => state.chats);
@@ -34,7 +39,7 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
   const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
-  
+
   const fetchMessages = async () => {
     if (!selectedChat) {
       return;
@@ -47,14 +52,14 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
           setLoading(false);
           message.success(response.message);
           setMessages(response.data);
-          socket.emit("join chat",selectedChat._id);
+          socket.emit("join chat", selectedChat._id);
         }, 500);
       } else {
         setTimeout(() => {
           setLoading(false);
           message.info(response.message);
           setMessages([]);
-          socket.emit("join chat",selectedChat._id);
+          socket.emit("join chat", selectedChat._id);
         }, 500);
       }
     } catch (error) {
@@ -66,7 +71,7 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
   };
   const sendMessage = async (event) => {
     if (event.key === "Enter" && newMessage) {
-      socket.emit("stop typing",selectedChat._id);
+      socket.emit("stop typing", selectedChat._id);
       try {
         const payload = {
           content: newMessage,
@@ -77,7 +82,7 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
         if (response.success) {
           setTimeout(() => {
             message.success(response.message);
-            socket.emit("new message",response.data);
+            socket.emit("new message", response.data);
             setMessages([...messages, response.data]);
           }, 500);
         } else {
@@ -93,58 +98,71 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     socket = io(ENDPOINT);
     socket.emit("setup", user);
-    socket.on("connected",() => setSocketConnected(true))
-    socket.on("typing",() => setIsTyping(true));
-    socket.on("stop typing",() => setIsTyping(false));
-  },[])
+    socket.on("connected", () => setSocketConnected(true));
+    socket.on("typing", () => setIsTyping(true));
+    socket.on("stop typing", () => setIsTyping(false));
+    socket.emit("came-online", user._id);
+    socket.on("online-users-updated", (users) => {
+      setOnlineUsers(users);
+    });
+    return () => {
+      // socket.disconnect();
+      // Remove event listeners when component unmounts
+      socket.emit("went-offline", user._id);
+      socket.on("online-users-updated", (users) => {
+        setOnlineUsers(users);
+      });
+    };
+  }, [user]);
 
   useEffect(() => {
     fetchMessages();
     selectedChatCompare = selectedChat;
   }, [selectedChat]);
 
-  useEffect(()=>{
+  useEffect(() => {
     socket.on("message received", (newMessageReceived) => {
-      if(!selectedChatCompare || selectedChatCompare._id !== newMessageReceived.chat._id){
+      if (
+        !selectedChatCompare ||
+        selectedChatCompare._id !== newMessageReceived.chat._id
+      ) {
         // Give Notification received message from other chat than the currently selected chat
         if (!notification.includes(newMessageReceived)) {
-          dispatch(SetNotification([newMessageReceived, ...notification]))
+          dispatch(SetNotification([newMessageReceived, ...notification]));
           setFetchAgain(!fetchAgain);
         }
+      } else {
+        setMessages([...messages, newMessageReceived]);
       }
-      else{
-        setMessages([...messages, newMessageReceived])
-      }
-    })
-  })
-
+    });
+  });
 
   const typingHandler = (e) => {
     setNewMessage(e.target.value);
 
     //Typing indicator logic
-    if(!socketConnected){
+    if (!socketConnected) {
       return;
     }
 
-    if(!typing){
+    if (!typing) {
       setTyping(true);
-      socket.emit("typing",selectedChat._id);
+      socket.emit("typing", selectedChat._id);
     }
 
     let lastTypingTime = new Date().getTime();
     var timerLength = 3000;
-    setTimeout(()=>{
-       var timeNow = new Date().getTime();
-       var timeDiff = timeNow - lastTypingTime;
-       if(timeDiff >= timerLength && typing){
-        socket.emit("stop typing",selectedChat._id);
+    setTimeout(() => {
+      var timeNow = new Date().getTime();
+      var timeDiff = timeNow - lastTypingTime;
+      if (timeDiff >= timerLength && typing) {
+        socket.emit("stop typing", selectedChat._id);
         setTyping(false);
-       }
-    }, timerLength)
+      }
+    }, timerLength);
   };
 
   return (
@@ -165,11 +183,15 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
               icon={<ArrowBackIcon />}
               onClick={() => {
                 dispatch(SetSelectedChat(null));
+                setFetchAgain(!fetchAgain);
               }}
             />
             {!selectedChat.isGroupChat ? (
               <>
-                {getSender(user, selectedChat.users)}
+                <Box display="flex" alignItems="center" gap={2}>
+                  {getSender(user, selectedChat.users)}
+                  {onlineUsers.includes(getSenderFull(user, selectedChat.users)._id) && <Text fontSize="xs" pt={3}>🟢</Text>}
+                </Box>
                 <ProfileModal user={getSenderFull(user, selectedChat.users)} />
               </>
             ) : (
@@ -214,9 +236,20 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
               </div>
             )}
             <FormControl onKeyDown={sendMessage} isRequired mt={3}>
-            {(isTyping)?(<div>
-              <lottie-player src="https://lottie.host/0dcc5be7-9f6a-4226-b918-5aed19d4ff13/sOC5a0Z4Qr.json" background="##FFFFFF" speed="1" style={{width:"30%",height:"20%"}} loop autoplay></lottie-player>
-            </div>):(<></>)}
+              {isTyping ? (
+                <div>
+                  <lottie-player
+                    src="https://lottie.host/0dcc5be7-9f6a-4226-b918-5aed19d4ff13/sOC5a0Z4Qr.json"
+                    background="##FFFFFF"
+                    speed="1"
+                    style={{ width: "30%", height: "20%" }}
+                    loop
+                    autoplay
+                  ></lottie-player>
+                </div>
+              ) : (
+                <></>
+              )}
               <Input
                 variant="filled"
                 bg="white"
