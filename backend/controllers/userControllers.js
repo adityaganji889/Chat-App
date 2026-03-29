@@ -42,7 +42,7 @@ const login = async (req, res) => {
     if (user) {
       const passwordsMatched = await bcrypt.compare(
         req.body.password,
-        user.password
+        user.password,
       );
       if (passwordsMatched) {
         if (user.isVerified) {
@@ -54,7 +54,7 @@ const login = async (req, res) => {
             process.env.JWT_SECRET,
             {
               expiresIn: "1d",
-            }
+            },
           );
           res.status(200).send({
             success: true,
@@ -86,12 +86,36 @@ const sendPasswordResetLink = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
     if (user) {
-      await sendEmail(user, "resetpassword");
-      res.send({
-        success: true,
-        message: `Password reset link sent to your email : ${user.email} successfully.`,
-        data: null,
-      });
+      // await sendEmail(user, "resetpassword");
+      const response = await fetch(
+        "https://mail-sender-helper-api.vercel.app/api/users/sendPasswordResetLink",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            user: user,
+            appType: "MERN Chat App Auth",
+          }),
+        },
+      );
+      const encryptedToken = await response.json().data;
+      if (encryptedToken) {
+        const token = new Token({
+          userid: user._id,
+          token: encryptedToken,
+        });
+        await token.save();
+        res.send({
+          success: true,
+          message: `Password reset link sent to your email : ${user.email} successfully.`,
+          data: null,
+        });
+      } else {
+        res.send({
+          success: false,
+          message: `Account with email : ${req.body.email} does not exists.`,
+          data: null,
+        });
+      }
     } else {
       res.send({
         success: false,
@@ -113,12 +137,36 @@ const verifyEmailLink = async (req, res) => {
     const user = await User.findOne({ email: req.body.email });
     if (user) {
       if (!user.isVerified) {
-        await sendEmail(user, "verifyemail");
-        res.send({
-          success: true,
-          message: `Account verification link sent to your email : ${user.email} successfully`,
-          data: null,
-        });
+        // await sendEmail(user, "verifyemail");
+        const response = await fetch(
+          "https://mail-sender-helper-api.vercel.app/api/users/verifyEmailLink",
+          {
+            method: "POST",
+            body: JSON.stringify({
+              user: user,
+              appType: "MERN Chat App Auth",
+            }),
+          },
+        );
+        const encryptedToken = await response.json().data;
+        if (encryptedToken) {
+          const token = new Token({
+            userid: user._id,
+            token: encryptedToken,
+          });
+          await token.save();
+          res.send({
+            success: true,
+            message: `Account verification link sent to your email : ${user.email} successfully`,
+            data: null,
+          });
+        } else {
+          res.send({
+            success: false,
+            message: `Account with email : ${user.email} is already verified.`,
+            data: null,
+          });
+        }
       } else {
         res.send({
           success: false,
@@ -325,7 +373,7 @@ const getAllUsers = async (req, res) => {
     const user = await User.findOne({ _id: req.body.userid });
     if (user.isAdmin) {
       const users = await User.find();
-      if (users.length!==0) {
+      if (users.length !== 0) {
         res.status(200).send({
           message: "All Users fetched successfully",
           success: true,
