@@ -91,8 +91,15 @@ const sendPasswordResetLink = async (req, res) => {
         "https://mail-sender-helper-api.vercel.app/api/users/sendPasswordResetLink",
         {
           method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify({
-            user: user,
+            user: {
+              _id: user._id,
+              email: user.email,
+              isVerified: user.isVerified,
+            },
             appType: "MERN Chat App Auth",
           }),
         },
@@ -144,8 +151,15 @@ const verifyEmailLink = async (req, res) => {
           "https://mail-sender-helper-api.vercel.app/api/users/verifyEmailLink",
           {
             method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
             body: JSON.stringify({
-              user: user,
+              user: {
+                _id: user._id,
+                email: user.email,
+                isVerified: user.isVerified,
+              },
               appType: "MERN Chat App Auth",
             }),
           },
