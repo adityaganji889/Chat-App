@@ -105,7 +105,13 @@ const sendPasswordResetLink = async (req, res) => {
         },
       );
       const result = await response.json();
-      console.log(result);
+       /*
+        {
+  success: true,
+  message: 'Password reset link sent to your email : adityaganji89@gmail.com successfully.',
+  data: '$2a$10$XvB.OOkeyuJkNHP6fA8r.qKS4ljGpjr457ogILwsh5hgWgYbhm4q'
+}
+        */
       const encryptedToken = result.data;
       if (encryptedToken) {
         const token = new Token({
@@ -165,7 +171,13 @@ const verifyEmailLink = async (req, res) => {
           },
         );
         const result = await response.json();
-        console.log(result);
+        /*
+        {
+  success: true,
+  message: 'Password reset link sent to your email : adityaganji89@gmail.com successfully.',
+  data: '$2a$10$XvB.OOkeyuJkNHP6fA8r.qKS4ljGpjr457ogILwsh5hgWgYbhm4q'
+}
+        */
         const encryptedToken = result.data;
         if (encryptedToken) {
           const token = new Token({
