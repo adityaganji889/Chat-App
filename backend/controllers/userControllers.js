@@ -98,6 +98,7 @@ const sendPasswordResetLink = async (req, res) => {
         },
       );
       const result = await response.json();
+      console.log(result);
       const encryptedToken = result.data;
       if (encryptedToken) {
         const token = new Token({
@@ -150,6 +151,7 @@ const verifyEmailLink = async (req, res) => {
           },
         );
         const result = await response.json();
+        console.log(result);
         const encryptedToken = result.data;
         if (encryptedToken) {
           const token = new Token({
